@@ -1,0 +1,145 @@
+#include <stdio.h>
+
+
+void win(int player, int winner, int pos[])
+{
+	// Print the board
+	printf("\n");
+	printf("%c|%c|%c\n", pos[0], pos[1], pos[2]);
+	printf("-+-+-\n");
+	printf("%c|%c|%c\n", pos[3], pos[4], pos[5]);
+	printf("-+-+-\n");
+	printf("%c|%c|%c\n", pos[6], pos[7], pos[8]);
+	if (winner)
+	{
+		printf("Winner is player %d\n", player);
+	}
+	else
+	{
+		printf("Match is a draw\n");
+	}
+}
+
+
+// Main code
+int main()
+{
+	// Declare Variables 
+	int winner = 0, count = 0;
+	int pos[9];
+	int index;
+	int sign;
+
+	int flag;
+	int k;
+	union tt
+	{
+		int s, player;
+
+	};
+
+
+	// Assign empty spaces
+	union tt z;
+	for (z.s = 0; z.s < 9; z.s++)
+	{
+		pos[z.s] = '  ';
+
+
+	}
+
+
+	while (count < 9 && winner != 1)
+	{
+		flag = 0;
+
+		// Print the board
+		printf("\n");
+		printf("%c|%c|%c\n", pos[0], pos[1], pos[2]);
+		printf("-+-+-\n");
+		printf("%c|%c|%c\n", pos[3], pos[4], pos[5]);
+		printf("-+-+-\n");
+		printf("%c|%c|%c\n", pos[6], pos[7], pos[8]);
+
+
+		if (count % 2 == 0)
+		{
+			sign = 'X';
+			z.player = 1;
+
+		}
+
+		else
+		{
+			sign = 'O';
+			z.player = 2;
+
+		}
+		// Player select a move 
+		printf("Seclect a space player%d(1-9): ", z.player);
+		scanf_s("%d", &index);
+
+		// Check player input 
+		if (index < 1 || index > 9)
+		{
+
+			printf("Allowed index is 1 to 9\n");
+			continue;
+		}
+
+		if (pos[index - 1] == 'X' || pos[index - 1] == 'O')
+		{
+			printf("Allowed index is 1 to 9");
+			continue;
+		}
+
+		pos[index - 1] = sign;
+		count++;
+
+		// Check if current player has 1
+		for (z.s = 0; z.s < 9; z.s++)
+		{
+			if (z.s % 3 == 0)
+				flag = 0;
+
+			if (pos[z.s] == sign)
+				flag++;
+			if (flag == 3)
+			{
+				winner = 1;
+				win(z.player, winner, pos);
+
+			}
+
+		}
+
+		// Check for winner
+		flag = 0;
+
+		for (z.s = 0; z.s < 3; z.s++)
+		{
+			for (k = z.s; k <= z.s + 6; k += 3)
+			{
+				if (pos[k] == sign)
+					flag++;
+			}
+
+			if (flag == 3)
+			{
+				winner = 1;
+				win(z.player, winner, pos);
+
+			}
+		}
+
+		// Check diagnol Winner 
+		flag = 0;
+		if ((pos[0] == sign && pos[4] == sign && pos[8] == sign) || (pos[2] == sign && pos[4] == sign && pos[6] == sign))
+		{
+			winner = 1;
+			win(z.player, winner, pos);
+
+		}
+	}
+
+}
